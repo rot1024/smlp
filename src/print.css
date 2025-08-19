@@ -1,0 +1,39 @@
+@media print {
+  body {
+    font-size: 12pt;
+  }
+
+  header button,
+  .export-buttons {
+    display: none !important;
+  }
+
+  .bg-gray-50 {
+    background: white !important;
+  }
+
+  .shadow,
+  .shadow-sm {
+    box-shadow: none !important;
+  }
+
+  .max-h-96 {
+    max-height: none !important;
+  }
+
+  .overflow-y-auto {
+    overflow: visible !important;
+  }
+
+  nav button {
+    display: none !important;
+  }
+
+  .print\\:block {
+    display: block !important;
+  }
+
+  .print\\:hidden {
+    display: none !important;
+  }
+}
