@@ -207,7 +207,7 @@ function App() {
             {pages.length === 0 && (
               <div className="bg-white rounded-lg shadow p-12 text-center">
                 <p className="text-gray-500">
-                  左のフォームにSMLP文字列と設定を入力して、「解析してプラン生成」をクリックしてください。
+                  左のフォームにSMLP文字列と設定を入力して、「プラン生成」をクリックしてください。
                 </p>
               </div>
             )}

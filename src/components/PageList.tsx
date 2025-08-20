@@ -13,7 +13,8 @@ export const PageList: React.FC<PageListProps> = ({ pages, onPageUpdate }) => {
     const sCount = allPanels.filter((p) => p.size === "S").length;
     const mCount = allPanels.filter((p) => p.size === "M").length;
     const lCount = allPanels.filter((p) => p.size === "L").length;
-    return { s: sCount, m: mCount, l: lCount };
+    const total = sCount + mCount + lCount;
+    return { s: sCount, m: mCount, l: lCount, total };
   }, [pages]);
 
   // SMLP文字列を生成
@@ -67,7 +68,7 @@ export const PageList: React.FC<PageListProps> = ({ pages, onPageUpdate }) => {
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold text-gray-800">ページ一覧</h2>
         <div className="text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded">
-          生成パネル: S={debugInfo.s}, M={debugInfo.m}, L={debugInfo.l}
+          コマ数: S={debugInfo.s}, M={debugInfo.m}, L={debugInfo.l} (計{debugInfo.total})
         </div>
       </div>
 

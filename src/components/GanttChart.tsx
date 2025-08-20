@@ -52,6 +52,24 @@ export const GanttChart: React.FC<GanttChartProps> = ({ schedule }) => {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold text-gray-800">ガントチャート</h2>
 
+      <div className="flex gap-2 text-xs">
+        <span className="flex items-center gap-1">
+          <span className="w-4 h-4 bg-green-500 rounded"></span>軽め (1-2h)
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="w-4 h-4 bg-blue-500 rounded"></span>中程度 (2-4h)
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="w-4 h-4 bg-yellow-500 rounded"></span>高負荷 (4-6h)
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="w-4 h-4 bg-orange-500 rounded"></span>缶詰め (6-10h)
+        </span>
+        <span className="flex items-center gap-1">
+          <span className="w-4 h-4 bg-red-500 rounded"></span>修羅場 (10h+)
+        </span>
+      </div>
+
       <div className="overflow-x-auto">
         <div className="min-w-full">
           {/* Hour scale header */}
@@ -109,24 +127,6 @@ export const GanttChart: React.FC<GanttChartProps> = ({ schedule }) => {
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="flex gap-2 text-xs">
-        <span className="flex items-center gap-1">
-          <span className="w-4 h-4 bg-green-500 rounded"></span>軽め (1-2h)
-        </span>
-        <span className="flex items-center gap-1">
-          <span className="w-4 h-4 bg-blue-500 rounded"></span>中程度 (2-4h)
-        </span>
-        <span className="flex items-center gap-1">
-          <span className="w-4 h-4 bg-yellow-500 rounded"></span>高負荷 (4-6h)
-        </span>
-        <span className="flex items-center gap-1">
-          <span className="w-4 h-4 bg-orange-500 rounded"></span>缶詰め (6-10h)
-        </span>
-        <span className="flex items-center gap-1">
-          <span className="w-4 h-4 bg-red-500 rounded"></span>修羅場 (10h+)
-        </span>
       </div>
     </div>
   );

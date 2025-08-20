@@ -8,6 +8,7 @@ interface InputFormProps {
 
 export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
   const [smlpString, setSmlpString] = useState("");
+  const [showHelp, setShowHelp] = useState(false);
   const [timeSettings, setTimeSettings] = useState<TimeSettings>({
     S: 30,
     M: 60,
@@ -15,9 +16,10 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
   });
   const [deadline, setDeadline] = useState("");
   const [restDays, setRestDays] = useState<number[]>([]); // デフォルトは休日なし
-  const [includeHolidays, setIncludeHolidays] = useState(true); // デフォルトで祝日を休日とする
+  const [includeHolidays, setIncludeHolidays] = useState(false); // デフォルトで祝日を平日とする
   const [weekdayMaxHours, setWeekdayMaxHours] = useState(2); // 平日の最大作業時間
   const [weekendMaxHours, setWeekendMaxHours] = useState(4); // 休日の最大作業時間
+  const [warmupEnabled, setWarmupEnabled] = useState(false); // ウォームアップ有効化（デフォルトOFF）
   const [warmupFactor, setWarmupFactor] = useState(0.75);
   const [warmupDays, setWarmupDays] = useState(3);
   const [finalSprintEnabled, setFinalSprintEnabled] = useState(false);
@@ -49,6 +51,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
       includeHolidays,
       weekdayMaxHours,
       weekendMaxHours,
+      warmupEnabled,
       warmupFactor,
       warmupDays,
       finalSprintEnabled,
@@ -68,9 +71,66 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6 p-6 bg-white rounded-lg shadow">
       <div>
-        <label htmlFor="smlp" className="block text-sm font-medium text-gray-700 mb-2">
-          SMLP文字列 (必須)
-        </label>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <label htmlFor="smlp" className="text-sm font-medium text-gray-700">
+              SMLP文字列 (必須)
+            </label>
+            <button
+              type="button"
+              onClick={() => setShowHelp(!showHelp)}
+              className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-600 text-xs font-bold"
+              aria-label="SMLP文字列の説明"
+            >
+              ?
+            </button>
+          </div>
+          <button
+            type="button"
+            onClick={loadSample}
+            className="text-sm text-blue-600 hover:text-blue-800"
+          >
+            サンプルを読み込む
+          </button>
+        </div>
+        {showHelp && (
+          <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <button
+              type="button"
+              onClick={() => setShowHelp(false)}
+              className="float-right text-gray-500 hover:text-gray-700"
+              aria-label="閉じる"
+            >
+              ×
+            </button>
+            <h3 className="font-semibold text-sm text-blue-900 mb-2">SMLP文字列とは？</h3>
+            <div className="text-sm text-gray-700 space-y-2">
+              <p>SMLP文字列は、漫画の各コマの作画コストを表現する記法です。</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>
+                  <strong>S (Small)</strong>: 作画コストが低いコマ（デフォルト30分）
+                </li>
+                <li>
+                  <strong>M (Medium)</strong>: 作画コストが中程度のコマ（デフォルト60分）
+                </li>
+                <li>
+                  <strong>L (Large)</strong>: 作画コストが高いコマ（デフォルト90分）
+                </li>
+                <li>
+                  <strong>P (Page)</strong>: ページ区切り
+                </li>
+              </ul>
+              <p className="mt-2">
+                <strong>例:</strong> MMLPSS =
+                1ページ目に中コスト2コマと高コスト1コマ、2ページ目に低コスト2コマ
+              </p>
+              <p className="mt-2">
+                <strong>数字入力も可能:</strong> "342"
+                のように数字だけを入力すると、各数字をページあたりのコマ数として自動変換します。
+              </p>
+            </div>
+          </div>
+        )}
         <textarea
           id="smlp"
           value={smlpString}
@@ -80,38 +140,26 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
           placeholder="MMLMMPSMMSMMP... または 48421934824423..."
           required
         />
-        <div className="mt-1 text-xs text-gray-500">
-          ※数字のみ入力した場合、各数字をページあたりのコマ数として自動的にSMLP文字列に変換します
-        </div>
         {convertedPreview && (
           <div className="mt-2 p-2 bg-blue-50 rounded border border-blue-200">
             <div className="text-xs font-semibold text-blue-700 mb-1">変換後のSMLP文字列:</div>
             <div className="font-mono text-sm text-blue-900 break-all">{convertedPreview}</div>
           </div>
         )}
-        <button
-          type="button"
-          onClick={loadSample}
-          className="mt-2 text-sm text-blue-600 hover:text-blue-800"
-        >
-          サンプルを読み込む
-        </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label htmlFor="deadline" className="block text-sm font-medium text-gray-700 mb-2">
-            締切日 (必須)
-          </label>
-          <input
-            type="date"
-            id="deadline"
-            value={deadline}
-            onChange={(e) => setDeadline(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
+      <div>
+        <label htmlFor="deadline" className="block text-sm font-medium text-gray-700 mb-2">
+          締切日 (必須)
+        </label>
+        <input
+          type="date"
+          id="deadline"
+          value={deadline}
+          onChange={(e) => setDeadline(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        />
       </div>
 
       <div className="grid grid-cols-3 gap-4">
@@ -218,7 +266,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
         </div>
       </div>
 
-      <details className="border-t pt-4">
+      <details className="pt-4">
         <summary className="cursor-pointer text-sm font-medium text-gray-700 mb-4">
           詳細設定
         </summary>
@@ -232,38 +280,63 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
                 onChange={(e) => setIncludeHolidays(e.target.checked)}
                 className="mr-2"
               />
-              <span className="text-sm font-medium text-gray-700">祝日を休日として扱う</span>
+              <span className="text-sm font-medium text-gray-700">祝日を平日として扱う</span>
             </label>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                ウォームアップ係数
-              </label>
+          <div className="flex items-center">
+            <label className="flex items-center">
               <input
-                type="number"
-                value={warmupFactor}
-                onChange={(e) => setWarmupFactor(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                min="0.1"
-                max="1"
-                step="0.05"
+                type="checkbox"
+                checked={allowSplitPanels}
+                onChange={(e) => setAllowSplitPanels(e.target.checked)}
+                className="mr-2"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                ウォームアップ日数
-              </label>
-              <input
-                type="number"
-                value={warmupDays}
-                onChange={(e) => setWarmupDays(Number(e.target.value))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                min="0"
-              />
-            </div>
+              <span className="text-sm font-medium text-gray-700">コマを日を跨いで分割可能</span>
+            </label>
           </div>
+          <div className="flex items-center gap-4">
+            <label className="flex items-center">
+              <input
+                type="checkbox"
+                checked={warmupEnabled}
+                onChange={(e) => setWarmupEnabled(e.target.checked)}
+                className="mr-2"
+              />
+              <span className="text-sm font-medium text-gray-700">ウォームアップを有効化</span>
+            </label>
+          </div>
+
+          {warmupEnabled && (
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  ウォームアップ係数
+                </label>
+                <input
+                  type="number"
+                  value={warmupFactor}
+                  onChange={(e) => setWarmupFactor(Number(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  min="0.1"
+                  max="1"
+                  step="0.05"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  ウォームアップ日数
+                </label>
+                <input
+                  type="number"
+                  value={warmupDays}
+                  onChange={(e) => setWarmupDays(Number(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  min="0"
+                />
+              </div>
+            </div>
+          )}
 
           <div className="flex items-center gap-4">
             <label className="flex items-center">
@@ -305,18 +378,6 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
               </div>
             </div>
           )}
-
-          <div className="flex items-center gap-4">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                checked={allowSplitPanels}
-                onChange={(e) => setAllowSplitPanels(e.target.checked)}
-                className="mr-2"
-              />
-              <span className="text-sm font-medium text-gray-700">パネルを日を跨いで分割可能</span>
-            </label>
-          </div>
         </div>
       </details>
 
@@ -324,7 +385,7 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
         type="submit"
         className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
       >
-        解析してプラン生成
+        プラン生成
       </button>
     </form>
   );

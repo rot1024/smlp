@@ -104,12 +104,19 @@ function scheduleFromDeadlineWithDynamicRange(
     if (isRestDay) {
       capacityMinutes = 0;
     } else {
-      // 平日か休日（土日・祝日）かで最大作業時間を決定
+      // 平日か休日（土日）かで最大作業時間を決定
       const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-      const isJapaneseHoliday = settings.includeHolidays && isHoliday(currentDate);
+      const isJapaneseHoliday = isHoliday(currentDate);
+      const treatHolidayAsWeekday = settings.includeHolidays && isJapaneseHoliday;
 
-      if (isWeekend || isJapaneseHoliday) {
-        // 休日（土日・祝日）の最大作業時間
+      if (isWeekend && !treatHolidayAsWeekday) {
+        // 土日の最大作業時間（祝日を平日として扱う場合は除く）
+        capacityMinutes = settings.weekendMaxHours * 60;
+      } else if (isWeekend && treatHolidayAsWeekday) {
+        // 土日でも祝日なら平日として扱う
+        capacityMinutes = settings.weekdayMaxHours * 60;
+      } else if (!isWeekend && isJapaneseHoliday && !settings.includeHolidays) {
+        // 平日の祝日で、祝日を平日として扱わない場合は休日扱い
         capacityMinutes = settings.weekendMaxHours * 60;
       } else {
         // 平日の最大作業時間
@@ -175,7 +182,7 @@ function scheduleFromDeadlineWithDynamicRange(
   }
 
   // ウォームアップ期間を適用（スケジューリング後に総日数が確定してから）
-  if (settings.warmupDays > 0) {
+  if (settings.warmupEnabled && settings.warmupDays > 0) {
     for (let i = 0; i < Math.min(settings.warmupDays, schedule.length); i++) {
       schedule[i].capacityMinutes = Math.round(schedule[i].capacityMinutes * settings.warmupFactor);
       // ラベルを再計算

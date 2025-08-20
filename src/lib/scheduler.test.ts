@@ -23,6 +23,7 @@ describe("schedulePages", () => {
       includeHolidays: true,
       weekdayMaxHours: 8,
       weekendMaxHours: 0,
+      warmupEnabled: false,
       warmupFactor: 1,
       warmupDays: 0,
       finalSprintEnabled: false,
@@ -126,6 +127,7 @@ describe("schedulePages", () => {
   });
 
   it("ウォームアップ期間の作業容量が減少する", () => {
+    settings.warmupEnabled = true;
     settings.warmupFactor = 0.5;
     settings.warmupDays = 3;
     settings.restDays = []; // 休日なしにして確実にテスト
@@ -380,6 +382,7 @@ describe("パネル優先順序の詳細テスト", () => {
       includeHolidays: true,
       weekdayMaxHours: 4, // 1日4時間まで
       weekendMaxHours: 0,
+      warmupEnabled: false,
       warmupFactor: 1,
       warmupDays: 0,
       finalSprintEnabled: false,
@@ -447,6 +450,7 @@ describe("パネル優先順序の詳細テスト", () => {
       includeHolidays: true,
       weekdayMaxHours: 2, // 1日2時間に制限して複数日に分散させる
       weekendMaxHours: 0,
+      warmupEnabled: false,
       warmupFactor: 1,
       warmupDays: 0,
       finalSprintEnabled: false,
@@ -521,6 +525,7 @@ describe("パネル時間設定の問題", () => {
       includeHolidays: true,
       weekdayMaxHours: 4,
       weekendMaxHours: 0,
+      warmupEnabled: false,
       warmupFactor: 1,
       warmupDays: 0,
       finalSprintEnabled: false,
@@ -574,6 +579,7 @@ describe("パネル時間設定の問題", () => {
       includeHolidays: true,
       weekdayMaxHours: 4,
       weekendMaxHours: 0,
+      warmupEnabled: false,
       warmupFactor: 1,
       warmupDays: 0,
       finalSprintEnabled: false,
@@ -617,6 +623,7 @@ describe("パネル時間設定の問題", () => {
       includeHolidays: true,
       weekdayMaxHours: 2, // 2時間/日 = 120分
       weekendMaxHours: 0,
+      warmupEnabled: false,
       warmupFactor: 1,
       warmupDays: 0,
       finalSprintEnabled: false,
@@ -680,6 +687,7 @@ describe("パネル時間設定の問題", () => {
       includeHolidays: true,
       weekdayMaxHours: 4, // 平日最大: 4時間
       weekendMaxHours: 0, // 休日最大: 0時間（休日は作業しない）
+      warmupEnabled: false,
       warmupFactor: 1,
       warmupDays: 0,
       finalSprintEnabled: false,

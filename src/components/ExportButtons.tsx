@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import type { Project, DaySchedule, WeekSummary } from "../types";
-import {
-  exportToJSON,
-  exportWeeklyCSV,
-  exportDailyCSV,
-  downloadFile,
-  saveToLocalStorage,
-} from "../lib/export";
+import { exportToJSON, exportWeeklyCSV, exportDailyCSV, downloadFile } from "../lib/export";
 import { exportToNotion } from "../lib/notionExport";
 
 interface ExportButtonsProps {
@@ -38,16 +32,6 @@ export const ExportButtons: React.FC<ExportButtonsProps> = ({
     downloadFile(csv, "daily-schedule.csv", "text/csv");
   };
 
-  const handleSaveLocal = () => {
-    if (!project) return;
-    const success = saveToLocalStorage("smlp-project", project);
-    if (success) {
-      alert("プロジェクトをローカルに保存しました");
-    } else {
-      alert("保存に失敗しました");
-    }
-  };
-
   const [copyButtonText, setCopyButtonText] = useState("Notion用コピー");
 
   const handleCopyForNotion = () => {
@@ -69,14 +53,6 @@ export const ExportButtons: React.FC<ExportButtonsProps> = ({
 
   return (
     <div className="flex gap-2 flex-wrap items-center">
-      <button
-        onClick={handleSaveLocal}
-        disabled={!project}
-        className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-      >
-        ローカル保存
-      </button>
-
       <button
         onClick={handleExportJSON}
         disabled={!project}
