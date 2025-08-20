@@ -73,6 +73,9 @@ export const WeeklySummary: React.FC<WeeklySummaryProps> = ({ summaries }) => {
                 最大日
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                SML
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 体感
               </th>
             </tr>
@@ -94,6 +97,9 @@ export const WeeklySummary: React.FC<WeeklySummaryProps> = ({ summaries }) => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {summary.maxDayHours.toFixed(1)}h
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  S:{summary.panelCounts.S} M:{summary.panelCounts.M} L:{summary.panelCounts.L}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span

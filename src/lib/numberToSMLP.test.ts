@@ -101,20 +101,34 @@ describe("convertNumbersToSMLP", () => {
 
   it("複雑な数字列を正しく変換する", () => {
     // 4-8-4-2-1-9-3-4-8-2-4-4-2-3
-    const expected = "LLMM" + "P" + // 4
-                    "LLMMMMSS" + "P" + // 8
-                    "LLMM" + "P" + // 4
-                    "LL" + "P" + // 2
-                    "L" + "P" + // 1
-                    "LLMMMMSSS" + "P" + // 9
-                    "LSM" + "P" + // 3
-                    "LLMM" + "P" + // 4
-                    "LLMMMMSS" + "P" + // 8
-                    "LL" + "P" + // 2
-                    "LLMM" + "P" + // 4
-                    "LLMM" + "P" + // 4
-                    "LL" + "P" + // 2
-                    "LSM"; // 3
+    const expected =
+      "LLMM" +
+      "P" + // 4
+      "LLMMMMSS" +
+      "P" + // 8
+      "LLMM" +
+      "P" + // 4
+      "LL" +
+      "P" + // 2
+      "L" +
+      "P" + // 1
+      "LLMMMMSSS" +
+      "P" + // 9
+      "LSM" +
+      "P" + // 3
+      "LLMM" +
+      "P" + // 4
+      "LLMMMMSS" +
+      "P" + // 8
+      "LL" +
+      "P" + // 2
+      "LLMM" +
+      "P" + // 4
+      "LLMM" +
+      "P" + // 4
+      "LL" +
+      "P" + // 2
+      "LSM"; // 3
     expect(convertNumbersToSMLP("48421934824423")).toBe(expected);
   });
 

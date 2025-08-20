@@ -15,29 +15,27 @@ export function convertNumbersToSMLP(input: string): string {
 
   const panelCounts: number[] = [];
   let i = 0;
-  
+
   while (i < input.length) {
-    if (input[i] === '0') {
+    if (input[i] === "0") {
       // Try to parse 0XXX0 format for 10+ panels
       // Need to find the LAST 0 in a sequence to get the full number
-      
-      if (i + 3 <= input.length && input[i + 1] !== '0') {
+
+      if (i + 3 <= input.length && input[i + 1] !== "0") {
         // Could be 0XXX0 format
-        // Find the end position by looking for the last consecutive 0
-        let endPos = input.length - 1;
-        
+
         // Scan from current position to find extent of this number
         // For "0100", we want to extract "10"
         // For "01020", we want to extract "102"
-        
+
         // Simple approach: if we have 0DDD0 pattern where DDD is 2+ chars
         let j = i + 1;
-        let numStr = '';
-        
+        let numStr = "";
+
         // Scan forward to find all the content before the final 0(s)
         // Look for pattern: current is 0, then non-zeros, then 0
         while (j < input.length) {
-          if (input[j] === '0') {
+          if (input[j] === "0") {
             // Found a 0 - could be end delimiter or part of number
             // If numStr has 2+ chars already, treat this as end delimiter
             if (numStr.length >= 2) {
@@ -51,9 +49,9 @@ export function convertNumbersToSMLP(input: string): string {
             j++;
           }
         }
-        
+
         // Check if we have a valid pattern
-        if (numStr.length >= 2 && j < input.length && input[j] === '0') {
+        if (numStr.length >= 2 && j < input.length && input[j] === "0") {
           // Valid 0XXX0 pattern - parse the number
           if (/^\d+$/.test(numStr)) {
             panelCounts.push(parseInt(numStr, 10));

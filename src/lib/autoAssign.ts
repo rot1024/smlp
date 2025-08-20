@@ -1,6 +1,5 @@
 import type { Page, Panel, PanelSize, TimeSettings } from "../types";
 
-
 export function calculatePanelMinutes(size: PanelSize, settings: TimeSettings): number {
   if (size === "P") return 0;
   if (size === "S") return settings.S;

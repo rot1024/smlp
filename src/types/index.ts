@@ -39,6 +39,11 @@ export interface WeekSummary {
   weekendHours: number;
   maxDayHours: number;
   peakLabel: string;
+  panelCounts: {
+    S: number;
+    M: number;
+    L: number;
+  };
 }
 
 export interface ProjectSettings {

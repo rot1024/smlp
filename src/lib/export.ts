@@ -12,6 +12,9 @@ export function exportWeeklyCSV(summaries: WeekSummary[]): string {
     "weekday_hours",
     "weekend_hours",
     "max_day",
+    "S_count",
+    "M_count",
+    "L_count",
     "peak_label",
   ];
   const rows = summaries.map((s) => [
@@ -21,6 +24,9 @@ export function exportWeeklyCSV(summaries: WeekSummary[]): string {
     s.weekdayHours.toFixed(2),
     s.weekendHours.toFixed(2),
     s.maxDayHours.toFixed(2),
+    s.panelCounts.S,
+    s.panelCounts.M,
+    s.panelCounts.L,
     s.peakLabel,
   ]);
 

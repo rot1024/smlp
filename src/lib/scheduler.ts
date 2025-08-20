@@ -219,6 +219,13 @@ export function generateWeekSummaries(schedule: DaySchedule[]): WeekSummary[] {
     let peakLabel: "very-light" | "light" | "moderate" | "high" | "harsh" | "very-harsh" =
       "very-light";
 
+    // パネルカウントの初期化
+    const panelCounts = {
+      S: 0,
+      M: 0,
+      L: 0,
+    };
+
     for (const day of days) {
       totalMinutes += day.usedMinutes;
       const date = new Date(day.date);
@@ -234,6 +241,13 @@ export function generateWeekSummaries(schedule: DaySchedule[]): WeekSummary[] {
         maxDayMinutes = day.usedMinutes;
         peakLabel = day.label; // 日次スケジュールで計算済みのラベルを使用
       }
+
+      // その日のパネルをカウント（Pは除外）
+      for (const panel of day.panels) {
+        if (panel.size === "S") panelCounts.S++;
+        else if (panel.size === "M") panelCounts.M++;
+        else if (panel.size === "L") panelCounts.L++;
+      }
     }
 
     // 新しいアルゴリズムでは作業がある日のみスケジュールに含まれるため、
@@ -247,6 +261,7 @@ export function generateWeekSummaries(schedule: DaySchedule[]): WeekSummary[] {
         weekendHours: weekendMinutes / 60,
         maxDayHours: maxDayMinutes / 60,
         peakLabel,
+        panelCounts,
       });
     }
   }

@@ -5,8 +5,8 @@ export function exportToNotion(weekSummaries: WeekSummary[], schedule: DaySchedu
 
   // 週次サマリテーブル
   markdown += "## 週次サマリ\n\n";
-  markdown += "| 週 | 総時間 | 平日 | 週末 | 最大日 | 体感 |\n";
-  markdown += "|---|---|---|---|---|---|\n";
+  markdown += "| 週 | 総時間 | 平日 | 週末 | 最大日 | SML | 体感 |\n";
+  markdown += "|---|---|---|---|---|---|---|\n";
 
   weekSummaries.forEach((week) => {
     const weekStart = new Date(week.weekStart);
@@ -15,10 +15,11 @@ export function exportToNotion(weekSummaries: WeekSummary[], schedule: DaySchedu
       weekEnd.getMonth() + 1
     }/${weekEnd.getDate()}`;
     const peakLabel = getPeakLabelText(week.peakLabel);
+    const smlCount = `S:${week.panelCounts.S} M:${week.panelCounts.M} L:${week.panelCounts.L}`;
 
     markdown += `| ${weekLabel} | ${week.totalHours.toFixed(1)}h | ${week.weekdayHours.toFixed(
       1,
-    )}h | ${week.weekendHours.toFixed(1)}h | ${week.maxDayHours.toFixed(1)}h | ${peakLabel} |\n`;
+    )}h | ${week.weekendHours.toFixed(1)}h | ${week.maxDayHours.toFixed(1)}h | ${smlCount} | ${peakLabel} |\n`;
   });
 
   markdown += "\n";
