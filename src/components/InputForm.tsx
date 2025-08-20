@@ -14,7 +14,6 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
     L: 90,
   });
   const [deadline, setDeadline] = useState("");
-  const [startDate, setStartDate] = useState("");
   const [restDays, setRestDays] = useState<number[]>([]); // デフォルトは休日なし
   const [includeHolidays, setIncludeHolidays] = useState(true); // デフォルトで祝日を休日とする
   const [weekdayMaxHours, setWeekdayMaxHours] = useState(2); // 平日の最大作業時間
@@ -46,7 +45,6 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
       smlpString: finalSmlpString,
       timeSettings,
       deadline,
-      startDate: startDate || undefined,
       restDays,
       includeHolidays,
       weekdayMaxHours,
@@ -112,19 +110,6 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
             onChange={(e) => setDeadline(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-2">
-            開始日 (任意)
-          </label>
-          <input
-            type="date"
-            id="startDate"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>

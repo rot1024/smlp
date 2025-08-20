@@ -19,7 +19,6 @@ describe("schedulePages", () => {
         L: 90,
       },
       deadline: deadline.toISOString().split("T")[0],
-      startDate: today.toISOString().split("T")[0],
       restDays: [0, 6], // 土日
       includeHolidays: true,
       weekdayMaxHours: 8,
@@ -179,7 +178,7 @@ describe("schedulePages", () => {
     expect(daysDiff).toBeLessThanOrEqual(3);
   });
 
-  it("開始日未指定時に全パネルがスケジュールに含まれる", () => {
+  it("全パネルがスケジュールに含まれる", () => {
     // より多くのパネルを含む大きなプロジェクトを作成
     const largePagesData = [
       {
@@ -214,10 +213,8 @@ describe("schedulePages", () => {
       },
     ] as Page[];
 
-    // 開始日を未指定にする
     const settingsWithoutStartDate = {
       ...settings,
-      startDate: undefined,
       weekdayMaxHours: 2, // 1日2時間に制限して期間不足を発生させやすくする
       weekendMaxHours: 0,
     };

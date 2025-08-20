@@ -91,12 +91,8 @@ function scheduleFromDeadlineWithDynamicRange(
   const currentDate = new Date(deadline);
   let dayIndex = 0;
 
-  // 開始日が指定されている場合は最大遡り日数を制限
-  const maxDaysBack = settings.startDate
-    ? Math.ceil(
-        (deadline.getTime() - new Date(settings.startDate).getTime()) / (1000 * 60 * 60 * 24),
-      ) + 1
-    : 365; // 開始日未指定なら最大1年まで遡る
+  // 最大1年まで遡る
+  const maxDaysBack = 365;
 
   // 締切日から逆算してスケジューリング
   while (panelIndex < panels.length && dayIndex < maxDaysBack) {

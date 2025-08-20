@@ -50,7 +50,6 @@ export interface ProjectSettings {
   smlpString: string;
   timeSettings: TimeSettings;
   deadline: string;
-  startDate?: string;
   restDays: number[]; // 曜日の配列 (0=日, 1=月, 2=火, 3=水, 4=木, 5=金, 6=土)
   includeHolidays: boolean; // 祝日を休日として扱うかどうか
   weekdayMaxHours: number; // 平日の最大作業時間
