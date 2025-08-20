@@ -1,48 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { autoAssignPanelSizes, calculatePanelMinutes, createPagesFromSMLP } from "./autoAssign";
+import { calculatePanelMinutes, createPagesFromSMLP } from "./autoAssign";
 import type { TimeSettings, PanelSize } from "../types";
-
-describe("autoAssignPanelSizes", () => {
-  it("1コマの場合はLを割り当てる", () => {
-    const result = autoAssignPanelSizes(1, 1);
-    expect(result).toEqual(["L"]);
-  });
-
-  it("2コマの場合は1L+1Mを割り当てる", () => {
-    const result = autoAssignPanelSizes(1, 2);
-    expect(result).toEqual(["L", "M"]);
-  });
-
-  it("3コマの場合は1L+2Mを割り当てる", () => {
-    const result = autoAssignPanelSizes(1, 3);
-    expect(result).toEqual(["L", "M", "M"]);
-  });
-
-  it("4コマの場合は2M+2Sを割り当てる", () => {
-    const result = autoAssignPanelSizes(1, 4);
-    expect(result).toEqual(["M", "M", "S", "S"]);
-  });
-
-  it("5コマの場合は2M+3Sを割り当てる", () => {
-    const result = autoAssignPanelSizes(1, 5);
-    expect(result).toEqual(["M", "M", "S", "S", "S"]);
-  });
-
-  it("6コマ以上の場合は1M+残りSを割り当てる", () => {
-    const result = autoAssignPanelSizes(1, 6);
-    expect(result).toEqual(["M", "S", "S", "S", "S", "S"]);
-  });
-
-  it("既にSMLP指定がある場合はそれを優先する", () => {
-    const result = autoAssignPanelSizes(1, 3, ["S", "L", "M"]);
-    expect(result).toEqual(["S", "L", "M"]);
-  });
-
-  it("SMLP指定がコマ数と一致しない場合は自動割り当てする", () => {
-    const result = autoAssignPanelSizes(1, 3, ["S", "L"]);
-    expect(result).toEqual(["L", "M", "M"]);
-  });
-});
 
 describe("calculatePanelMinutes", () => {
   const settings: TimeSettings = {
@@ -85,7 +43,7 @@ describe("createPagesFromSMLP", () => {
     expect(result).toHaveLength(2);
     expect(result[0].number).toBe(1);
     expect(result[0].panels).toHaveLength(3);
-    // 自動割り当ての場合、3コマは1L+2Mになるが、既存のSMLP指定を優先
+    // SMLP指定をそのまま使用
     expect(result[0].panels[0].size).toBe("M");
     expect(result[0].panels[0].estimatedMinutes).toBe(60);
     expect(result[0].panels[1].size).toBe("M");
@@ -95,7 +53,7 @@ describe("createPagesFromSMLP", () => {
 
     expect(result[1].number).toBe(2);
     expect(result[1].panels).toHaveLength(2);
-    // 自動割り当ての場合、2コマは1L+1Mになるが、既存のSMLP指定を優先
+    // SMLP指定をそのまま使用
     expect(result[1].panels[0].size).toBe("S");
     expect(result[1].panels[0].estimatedMinutes).toBe(30);
     expect(result[1].panels[1].size).toBe("S");

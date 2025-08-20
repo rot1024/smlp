@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import type { ProjectSettings, TimeSettings } from "../types";
+import { convertNumbersToSMLP, isNumericOnly } from "../lib/numberToSMLP";
 
 interface InputFormProps {
   onSubmit: (settings: ProjectSettings) => void;
@@ -25,11 +26,24 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
   const [finalSprintMaxHours, setFinalSprintMaxHours] = useState(14);
   const [allowSplitPanels, setAllowSplitPanels] = useState(false);
 
+  // 数字入力の場合の変換プレビュー
+  const convertedPreview = React.useMemo(() => {
+    if (isNumericOnly(smlpString.trim())) {
+      return convertNumbersToSMLP(smlpString.trim());
+    }
+    return null;
+  }, [smlpString]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // 数字のみの入力の場合はSMLP文字列に変換
+    const finalSmlpString = isNumericOnly(smlpString.trim())
+      ? convertNumbersToSMLP(smlpString.trim())
+      : smlpString;
+
     const settings: ProjectSettings = {
-      smlpString,
+      smlpString: finalSmlpString,
       timeSettings,
       deadline,
       startDate: startDate || undefined,
@@ -65,9 +79,18 @@ export const InputForm: React.FC<InputFormProps> = ({ onSubmit }) => {
           onChange={(e) => setSmlpString(e.target.value)}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-300"
           rows={3}
-          placeholder="MMLMMPSMMSMMP..."
+          placeholder="MMLMMPSMMSMMP... または 48421934824423..."
           required
         />
+        <div className="mt-1 text-xs text-gray-500">
+          ※数字のみ入力した場合、各数字をページあたりのコマ数として自動的にSMLP文字列に変換します
+        </div>
+        {convertedPreview && (
+          <div className="mt-2 p-2 bg-blue-50 rounded border border-blue-200">
+            <div className="text-xs font-semibold text-blue-700 mb-1">変換後のSMLP文字列:</div>
+            <div className="font-mono text-sm text-blue-900 break-all">{convertedPreview}</div>
+          </div>
+        )}
         <button
           type="button"
           onClick={loadSample}

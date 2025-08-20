@@ -15,6 +15,30 @@ export const PageList: React.FC<PageListProps> = ({ pages, onPageUpdate }) => {
     const lCount = allPanels.filter((p) => p.size === "L").length;
     return { s: sCount, m: mCount, l: lCount };
   }, [pages]);
+
+  // SMLP文字列を生成
+  const smlpString = React.useMemo(() => {
+    return pages
+      .map((page, index) => {
+        const panelString = page.panels.map((panel) => panel.size).join("");
+        // 最後のページ以外はPを追加
+        return index < pages.length - 1 ? panelString + "P" : panelString;
+      })
+      .join("");
+  }, [pages]);
+
+  // コマ数列を生成（10以上は0で囲む）
+  const panelCountString = React.useMemo(() => {
+    return pages
+      .map((page) => {
+        const count = page.panels.length;
+        if (count >= 10) {
+          return `0${count}0`;
+        }
+        return count.toString();
+      })
+      .join("");
+  }, [pages]);
   const handlePanelSizeChange = (page: Page, panelIndex: number, newSize: PanelSize) => {
     const updatedPage = {
       ...page,
@@ -108,6 +132,19 @@ export const PageList: React.FC<PageListProps> = ({ pages, onPageUpdate }) => {
           <strong>ヒント:</strong> 各パネルのサイズをクリックして手動で調整できます。
           変更は即座にスケジュールに反映されます。
         </p>
+      </div>
+
+      <div className="mt-4 p-4 bg-gray-100 rounded-lg">
+        <h3 className="text-sm font-semibold text-gray-700 mb-2">生成されたSMLP文字列:</h3>
+        <div className="font-mono text-sm text-gray-900 bg-white px-3 py-2 rounded border border-gray-300 mb-2 break-all">
+          {smlpString || "(ページがありません)"}
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-gray-600">コマ数列:</span>
+          <span className="font-mono text-sm text-gray-800 bg-white px-2 py-1 rounded border border-gray-200">
+            {panelCountString || "-"}
+          </span>
+        </div>
       </div>
     </div>
   );
